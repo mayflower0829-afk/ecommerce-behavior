@@ -1,0 +1,125 @@
+{
+  "rows_total": 541909,
+  "rows_return_or_cancel": 10624,
+  "return_rate_rows": 1.96,
+  "rows_no_customerid_pct": 24.9,
+  "gmv_total": 8911408.0,
+  "n_customers": 4338,
+  "n_invoices": 18532,
+  "n_products": 3665,
+  "aov": 480.9,
+  "date_min": "2010-12-01",
+  "date_max": "2011-12-09",
+  "peak_month": "2011-11",
+  "peak_month_gmv": 1161817.0,
+  "rfm_n": 4338,
+  "segments": [
+    {
+      "segment": "重要价值客户",
+      "人数": 1139,
+      "人均消费": 5204.3,
+      "人均订单": 10.0,
+      "人数占比": 26.3,
+      "GMV占比": 66.5
+    },
+    {
+      "segment": "重要保持客户",
+      "人数": 596,
+      "人均消费": 2028.7,
+      "人均订单": 5.3,
+      "人数占比": 13.7,
+      "GMV占比": 13.6
+    },
+    {
+      "segment": "一般客户",
+      "人数": 905,
+      "人均消费": 767.4,
+      "人均订单": 1.9,
+      "人数占比": 20.9,
+      "GMV占比": 7.8
+    },
+    {
+      "segment": "重要发展客户",
+      "人数": 633,
+      "人均消费": 885.7,
+      "人均订单": 1.8,
+      "人数占比": 14.6,
+      "GMV占比": 6.3
+    },
+    {
+      "segment": "流失客户",
+      "人数": 1065,
+      "人均消费": 487.7,
+      "人均订单": 1.1,
+      "人数占比": 24.6,
+      "GMV占比": 5.8
+    }
+  ],
+  "kmeans_summary": [
+    {
+      "cluster": 0,
+      "人数": 1447,
+      "R均": 45.4,
+      "F均": 4.3,
+      "M均": 1667.7
+    },
+    {
+      "cluster": 1,
+      "人数": 1392,
+      "R均": 58.1,
+      "F均": 1.5,
+      "M均": 392.9
+    },
+    {
+      "cluster": 2,
+      "人数": 941,
+      "R均": 259.2,
+      "F均": 1.4,
+      "M均": 390.2
+    },
+    {
+      "cluster": 3,
+      "人数": 558,
+      "R均": 19.5,
+      "F均": 16.0,
+      "M均": 10007.5
+    }
+  ],
+  "avg_monthly_repeat_rate": 70.6,
+  "return_gmv_rate": 6.42,
+  "top_products": [
+    {
+      "name": "PAPER CRAFT , LITTLE BIRDIE",
+      "gmv": 168470.0
+    },
+    {
+      "name": "REGENCY CAKESTAND 3 TIER",
+      "gmv": 142593.0
+    },
+    {
+      "name": "WHITE HANGING HEART T-LIGHT HOLDER",
+      "gmv": 100448.0
+    },
+    {
+      "name": "JUMBO BAG RED RETROSPOT",
+      "gmv": 85221.0
+    },
+    {
+      "name": "MEDIUM CERAMIC TOP STORAGE JAR",
+      "gmv": 81417.0
+    },
+    {
+      "name": "POSTAGE",
+      "gmv": 77804.0
+    },
+    {
+      "name": "PARTY BUNTING",
+      "gmv": 68844.0
+    },
+    {
+      "name": "ASSORTED COLOUR BIRD ORNAMENT",
+      "gmv": 56580.0
+    }
+  ],
+  "uk_gmv_share": 82.0
+}
