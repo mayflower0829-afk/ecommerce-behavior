@@ -223,7 +223,90 @@ fig.tight_layout()
 fig.savefig(OUT / "06_products_countries.png", bbox_inches="tight")
 plt.close(fig)
 
-# ========== 8. 保存 ==========
+# ========== 7. Cohort 留存矩阵（按首购月份分组） ==========
+first_month = known.groupby("CustomerID")["ym"].min().rename("cohort")
+cust_ym = known[["CustomerID", "ym"]].drop_duplicates().join(first_month, on="CustomerID")
+cust_ym["period"] = (cust_ym["ym"].str[:4].astype(int) - cust_ym["cohort"].str[:4].astype(int)) * 12 \
+    + cust_ym["ym"].str[5:7].astype(int) - cust_ym["cohort"].str[5:7].astype(int)
+cohort_sizes = cust_ym.groupby("cohort")["CustomerID"].nunique()
+# 注意：除以 cohort_sizes 必须按行对齐（div(axis=0)）。直接用 "/" 会按列对齐，
+# 把 cohort 名混进列索引，导致整表错乱——这是本次开发踩过并修复的 pandas 坑。
+retention = (cust_ym.pivot_table(index="cohort", columns="period", values="CustomerID",
+                                 aggfunc="nunique").div(cohort_sizes, axis=0) * 100)
+retention.columns = retention.columns.astype(int)
+retention = retention.drop(columns=0)  # 第0月恒为100%
+avg_m1 = float(retention[1].dropna().mean()) if 1 in retention.columns else float("nan")
+cols3 = [c for c in [1, 2, 3] if c in retention.columns]
+metrics["cohort"] = {
+    "avg_m1_retention": round(avg_m1, 1),
+    "n_cohorts": int(len(cohort_sizes)),
+    "note": "留存=该 cohort 客户在第 N 月仍有购买的比例；12月数据不完整已随自然截断展示",
+}
+
+fig, ax = plt.subplots(figsize=(10, 4.6))
+im = ax.imshow(retention.values, cmap="Greens", aspect="auto", vmin=0, vmax=60)
+ax.set_xticks(range(retention.shape[1]), [f"第{c}月" for c in retention.columns], fontsize=9)
+ax.set_yticks(range(retention.shape[0]), retention.index, fontsize=9)
+for i in range(retention.shape[0]):
+    for j in range(retention.shape[1]):
+        v = retention.values[i, j]
+        if not np.isnan(v):
+            ax.text(j, i, f"{v:.0f}", ha="center", va="center", fontsize=8,
+                    color="white" if v > 35 else "#1C2B26")
+ax.set_title("Cohort 月度留存矩阵（%，行=首购月份）：首月留存约 "
+             f"{avg_m1:.0f}%，B2B 客户粘性极强")
+fig.colorbar(im, ax=ax, shrink=0.8, label="留存率 %")
+fig.tight_layout()
+fig.savefig(OUT / "07_cohort.png", bbox_inches="tight")
+plt.close(fig)
+
+# ========== 8. 购物篮分析：商品关联（lift） ==========
+basket = known.groupby(["InvoiceNoStr", "Description"])["Quantity"].sum().reset_index()
+item_freq = basket["Description"].value_counts()
+MIN_FREQ = 50
+while True:  # 高频商品过多时自动收紧阈值，控制两两组合规模
+    popular = item_freq[item_freq >= MIN_FREQ].index
+    if len(popular) <= 400 or MIN_FREQ >= 300:
+        break
+    MIN_FREQ += 25
+b = basket[basket["Description"].isin(popular)]
+n_invoices = b["InvoiceNoStr"].nunique()
+from collections import Counter
+inv_by_item = b.groupby("Description")["InvoiceNoStr"].apply(set).to_dict()
+pairs = Counter()
+items = list(inv_by_item.keys())
+# 组合数较大，仅在高频商品内两两组合
+if len(items) <= 400:
+    import itertools
+    for a, bb in itertools.combinations(sorted(items), 2):
+        co = len(inv_by_item[a] & inv_by_item[bb])
+        if co >= 15:
+            lift = (co / n_invoices) / ((len(inv_by_item[a]) / n_invoices) * (len(inv_by_item[bb]) / n_invoices))
+            pairs[(a, bb)] = (co, lift)
+top_pairs = sorted(pairs.items(), key=lambda kv: (-kv[1][1]))[:10]
+metrics["basket"] = {
+    "n_popular_items": int(len(popular)),
+    "min_freq": int(MIN_FREQ),
+    "min_co_occurrence": 15,
+    "top_pairs": [{"a": k[0], "b": k[1], "co": v[0], "lift": round(v[1], 1)}
+                  for k, v in top_pairs[:6]],
+}
+
+fig, ax = plt.subplots(figsize=(9.5, 4.2))
+labels = [f"{k[0][:22]}… + {k[1][:22]}…" if len(k[0]) > 22 or len(k[1]) > 22
+          else f"{k[0]} + {k[1]}" for k, _ in top_pairs[:8][::-1]]
+lifts = [v[1] for _, v in top_pairs[:8][::-1]]
+ax.barh(labels, lifts, color=C["warm"])
+for i, (v, (_, (co, _))) in enumerate(zip(lifts, top_pairs[:8][::-1])):
+    ax.text(v + 0.05, i, f"{v:.1f}x (n={co})", va="center", fontsize=8)
+ax.set_xlabel("提升度 lift（>1 表示正关联）")
+ax.set_title("购物篮分析：关联最强的商品组合（共现≥15张发票）")
+ax.spines[["top", "right"]].set_visible(False)
+fig.tight_layout()
+fig.savefig(OUT / "08_basket.png", bbox_inches="tight")
+plt.close(fig)
+
+# ========== 9. 保存 ==========
 (OUT / "metrics.json").write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
 print(json.dumps({k: metrics[k] for k in
                   ["rows_total", "n_customers", "gmv_total", "aov", "avg_monthly_repeat_rate",

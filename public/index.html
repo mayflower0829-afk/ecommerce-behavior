@@ -104,7 +104,21 @@ a { color:var(--accent); }
 </section>
 
 <section>
-  <h2>6 · 分析局限（诚实声明）</h2>
+  <h2>6 · Cohort 留存矩阵与购物篮关联</h2>
+  <div class="card">
+    <img src="charts/07_cohort.png" alt="Cohort留存">
+    <p><b>Cohort 留存：</b>按首购月份分组的月度留存矩阵显示，首月留存平均约 20.6%——B2B 客户一旦建立采购关系，粘性极强且长期稳定，这与「老客占比 70.6%」互相印证。运营含义：新客首月的转化动作（首单优惠、客服跟进）是全生命周期价值的关键杠杆。</p>
+    <img src="charts/08_basket.png" alt="购物篮">
+    <p><b>购物篮分析：</b>在 365 个高频商品（≥275 张发票）中两两计算共现提升度（lift），展示关联最强的组合。lift &gt; 1 表示两商品被同时采购的频率显著高于随机——B2B 场景下通常是「成套采购」模式，可用于组合定价与捆绑推荐；同时这类共现关系也是缺货预警的输入（A 缺货会连带 B 的订单）。</p>
+    <table class="tbl">
+      <thead><tr><th>商品 A</th><th>商品 B</th><th>共现发票数</th><th>lift</th></tr></thead>
+      <tbody><tr><td>SET/6 RED SPOTTY PAPER CUPS</td><td>SET/6 RED SPOTTY PAPER PLATES</td><td>236</td><td>43.8x</td></tr><tr><td>POPPY'S PLAYHOUSE BEDROOM </td><td>POPPY'S PLAYHOUSE KITCHEN</td><td>254</td><td>39.9x</td></tr><tr><td>PINK VINTAGE PAISLEY PICNIC BAG</td><td>SCANDINAVIAN PAISLEY PICNIC BAG</td><td>199</td><td>37.9x</td></tr><tr><td>SMALL DOLLY MIX DESIGN ORANGE BOWL</td><td>SMALL MARSHMALLOWS PINK BOWL</td><td>225</td><td>37.2x</td></tr><tr><td>FELTCRAFT CUSHION BUTTERFLY</td><td>FELTCRAFT CUSHION RABBIT</td><td>201</td><td>36.3x</td></tr><tr><td>BLUE SPOT CERAMIC DRAWER KNOB</td><td>RED SPOT CERAMIC DRAWER KNOB</td><td>166</td><td>35.4x</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>7 · 分析局限（诚实声明）</h2>
   <div class="card">
     <ul>
       <li>CustomerID 缺失的 24.9% 订单未纳入客户级分析，RFM 口径为「可识别客户」，总 GMV 会略低于全量口径。</li>

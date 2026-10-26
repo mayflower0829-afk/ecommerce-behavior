@@ -158,7 +158,21 @@ a {{ color:var(--accent); }}
 </section>
 
 <section>
-  <h2>6 · 分析局限（诚实声明）</h2>
+  <h2>6 · Cohort 留存矩阵与购物篮关联</h2>
+  <div class="card">
+    <img src="charts/07_cohort.png" alt="Cohort留存">
+    <p><b>Cohort 留存：</b>按首购月份分组的月度留存矩阵显示，首月留存平均约 {M['cohort']['avg_m1_retention']}%——B2B 客户一旦建立采购关系，粘性极强且长期稳定，这与「老客占比 70.6%」互相印证。运营含义：新客首月的转化动作（首单优惠、客服跟进）是全生命周期价值的关键杠杆。</p>
+    <img src="charts/08_basket.png" alt="购物篮">
+    <p><b>购物篮分析：</b>在 {M['basket']['n_popular_items']} 个高频商品（≥{M['basket']['min_freq']} 张发票）中两两计算共现提升度（lift），展示关联最强的组合。lift &gt; 1 表示两商品被同时采购的频率显著高于随机——B2B 场景下通常是「成套采购」模式，可用于组合定价与捆绑推荐；同时这类共现关系也是缺货预警的输入（A 缺货会连带 B 的订单）。</p>
+    <table class="tbl">
+      <thead><tr><th>商品 A</th><th>商品 B</th><th>共现发票数</th><th>lift</th></tr></thead>
+      <tbody>{''.join(f"<tr><td>{esc(p['a'])}</td><td>{esc(p['b'])}</td><td>{p['co']}</td><td>{p['lift']}x</td></tr>" for p in M['basket']['top_pairs'])}</tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>7 · 分析局限（诚实声明）</h2>
   <div class="card">
     <ul>
       <li>CustomerID 缺失的 {M['rows_no_customerid_pct']}% 订单未纳入客户级分析，RFM 口径为「可识别客户」，总 GMV 会略低于全量口径。</li>

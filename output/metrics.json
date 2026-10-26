@@ -121,5 +121,53 @@
       "gmv": 56580.0
     }
   ],
-  "uk_gmv_share": 82.0
+  "uk_gmv_share": 82.0,
+  "cohort": {
+    "avg_m1_retention": 20.6,
+    "n_cohorts": 13,
+    "note": "留存=该 cohort 客户在第 N 月仍有购买的比例；12月数据不完整已随自然截断展示"
+  },
+  "basket": {
+    "n_popular_items": 365,
+    "min_freq": 275,
+    "min_co_occurrence": 15,
+    "top_pairs": [
+      {
+        "a": "SET/6 RED SPOTTY PAPER CUPS",
+        "b": "SET/6 RED SPOTTY PAPER PLATES",
+        "co": 236,
+        "lift": 43.8
+      },
+      {
+        "a": "POPPY'S PLAYHOUSE BEDROOM ",
+        "b": "POPPY'S PLAYHOUSE KITCHEN",
+        "co": 254,
+        "lift": 39.9
+      },
+      {
+        "a": "PINK VINTAGE PAISLEY PICNIC BAG",
+        "b": "SCANDINAVIAN PAISLEY PICNIC BAG",
+        "co": 199,
+        "lift": 37.9
+      },
+      {
+        "a": "SMALL DOLLY MIX DESIGN ORANGE BOWL",
+        "b": "SMALL MARSHMALLOWS PINK BOWL",
+        "co": 225,
+        "lift": 37.2
+      },
+      {
+        "a": "FELTCRAFT CUSHION BUTTERFLY",
+        "b": "FELTCRAFT CUSHION RABBIT",
+        "co": 201,
+        "lift": 36.3
+      },
+      {
+        "a": "BLUE SPOT CERAMIC DRAWER KNOB",
+        "b": "RED SPOT CERAMIC DRAWER KNOB",
+        "co": 166,
+        "lift": 35.4
+      }
+    ]
+  }
 }
