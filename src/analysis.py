@@ -70,10 +70,12 @@ metrics["peak_month_gmv"] = round(float(monthly.max()), 0)
 # ========== 3. 下单时段规律（星期 × 小时热力） ==========
 known["dow"] = known["InvoiceDate"].dt.dayofweek
 known["hour"] = known["InvoiceDate"].dt.hour
-heat = known.pivot_table(index="dow", columns="hour", values="Revenue", aggfunc="sum").fillna(0)
+# reindex 到完整 7 天：该平台周六无交易，缺失会让后续标签整体错位
+heat = (known.pivot_table(index="dow", columns="hour", values="Revenue", aggfunc="sum")
+        .reindex(range(7)).fillna(0))
 fig, ax = plt.subplots(figsize=(10, 3.8))
 im = ax.imshow(np.log1p(heat), aspect="auto", cmap="Greens")
-ax.set_yticks(range(len(heat)), ["周一", "周二", "周三", "周四", "周五", "周六", "周日"][: len(heat)])
+ax.set_yticks(range(7), ["周一", "周二", "周三", "周四", "周五", "周六", "周日"])
 ax.set_xlabel("下单小时")
 ax.set_title("下单时段热力（颜色 = ln(销售额)）：工作日上午 10-12 点为峰值；该平台周六不营业")
 fig.colorbar(im, ax=ax, shrink=0.85)
